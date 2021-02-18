@@ -53,6 +53,9 @@ class api extends \curl {
     /** @var string the api baseurl */
     private $baseurl;
 
+    /** @var string the /search/ endpoint baseurl */
+    private $searchurl;
+
     /** @var array array of supported api levels */
     private static $supportedapilevel;
 
@@ -138,6 +141,7 @@ class api extends \curl {
         $this->password = get_config('tool_opencast', 'apipassword');;
         $this->timeout = get_config('tool_opencast', 'apitimeout');;
         $this->baseurl = get_config('tool_opencast', 'apiurl');
+        $this->searchurl = get_config('tool_opencast', 'searchurl');
         if (empty($this->baseurl)) {
             throw new \moodle_exception('apiurlempty', 'tool_opencast');
         }
@@ -148,6 +152,10 @@ class api extends \curl {
 
         if (empty($this->password)) {
             throw new \moodle_exception('apipasswordempty', 'tool_opencast');
+        }
+
+        if (empty($this->searchurl)) {
+            $this->searchurl = $this->baseurl;
         }
     }
 
@@ -208,7 +216,7 @@ class api extends \curl {
      */
     public function oc_get($resource, $runwithroles = array()) {
 
-        $url = $this->baseurl . $resource;
+        $url = $this->get_resource_url($resource);
 
         $header = $this->get_authentication_header($runwithroles);
         $header[] = 'Content-Type: application/json';
@@ -318,7 +326,7 @@ class api extends \curl {
      */
     public function oc_post($resource, $params = array(), $runwithroles = array()) {
 
-        $url = $this->baseurl . $resource;
+        $url = $this->get_resource_url($resource);
 
         $header = $this->get_authentication_header($runwithroles);
 
@@ -363,7 +371,7 @@ class api extends \curl {
      */
     public function oc_put($resource, $params = array(), $runwithroles = array()) {
 
-        $url = $this->baseurl . $resource;
+        $url = $this->get_resource_url($resource);
 
         $header = $this->get_authentication_header($runwithroles);
         $this->setHeader($header);
@@ -397,7 +405,7 @@ class api extends \curl {
      */
     public function oc_delete($resource, $params = array(), $runwithroles = array()) {
 
-        $url = $this->baseurl . $resource;
+        $url = $this->get_resource_url($resource);
 
         $header = $this->get_authentication_header($runwithroles);
         $this->setHeader($header);
@@ -440,6 +448,20 @@ class api extends \curl {
             self::$supportedapilevel = $result->versions;
         }
         return is_array(self::$supportedapilevel) && in_array($level, self::$supportedapilevel);
+    }
+
+    /**
+     * Returns the absolute resource url with the matching base url,
+     * which can differ between /api/ and /search/ endpoints.
+     * @param $resource string the resource
+     * @return string the absolute resource url
+     */
+    public function get_resource_url(string $resource): string {
+        if (substr_compare($resource, '/search/', 0, strlen('/search/')) === 0) {
+            return $this->searchurl . $resource;
+        } else {
+            return $this->baseurl . $resource;
+        }
     }
 
 }

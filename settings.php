@@ -38,5 +38,8 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configduration('tool_opencast/connecttimeout', get_string('connecttimeout', 'tool_opencast'),
         get_string('connecttimeoutdesc', 'tool_opencast'), 1));
 
+    $settings->add(new admin_setting_configtext('tool_opencast/searchurl', get_string('searchurl', 'tool_opencast'),
+        get_string('searchurldesc', 'tool_opencast'), ''));
+
     $ADMIN->add('tools', $settings);
 }

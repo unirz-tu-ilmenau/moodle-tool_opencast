@@ -38,6 +38,8 @@ $string['apiusernamedesc'] = 'For all calls to the API moodle uses this user. Au
 $string['apiusernameempty'] = 'Username for Opencast API user is not setup correctly, go to settings of tool opencast to fix this';
 $string['connecttimeout'] = 'Connection timeout';
 $string['connecttimeoutdesc'] = 'Setup the time in seconds while moodle is trying to connect to opencast until timeout';
+$string['searchurl'] = 'Opencast search url';
+$string['searchurldesc'] = 'If /search/ endpoints have a different base url, that url must be entered here.';
 
 $string['opencast:externalapi'] = 'Access to tool_opencast webservices';
 $string['opencast:instructor'] = 'Gives the role of an instructor in opencast';
