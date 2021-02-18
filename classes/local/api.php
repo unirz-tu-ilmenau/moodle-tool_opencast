@@ -453,7 +453,7 @@ class api extends \curl {
     /**
      * Returns the absolute resource url with the matching base url,
      * which can differ between /api/ and /search/ endpoints.
-     * @param $resource string the resource
+     * @param string $resource the resource
      * @return string the absolute resource url
      */
     public function get_resource_url(string $resource): string {
